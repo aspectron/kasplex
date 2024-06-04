@@ -1,0 +1,124 @@
+[package]
+name = "kasplex"
+version = "0.0.1"
+edition = "2021"
+authors = ["Kasplex Contributors"]
+license = "Apache 2.0 OR MIT"
+repository = "https://github.com/aspectron/kasplex"
+description = "Kasplex utilities (WIP)"
+
+[features]
+# TBD (these isolate exported crates reducing WASM footprint)
+wasm32-sdk = ["kaspa-wasm/wasm32-sdk"]
+wasm32-core = ["kaspa-wasm/wasm32-core"]
+wasm32-rpc = ["kaspa-wasm/wasm32-rpc"]
+wasm32-keygen = ["kaspa-wasm/wasm32-keygen"]
+
+full = [] # this will include Kaspa WASM SDK exports
+default = [
+    "wasm32-core",
+    "full" # for testing
+]
+# default = []
+
+[dependencies]
+
+# _______________________________________________________
+#  ____ _  _ ____ ___ _   _    _  _ ____ ____ ___  ____ 
+#  |__/ |  | [__   |   \_/  __ |_/  |__| [__  |__] |__| 
+#  |  \ |__| ___]  |    |      | \_ |  | ___] |    |  | 
+# _______________________________________________________
+
+# kaspa-addresses = "0.13.4"
+# kaspa-bip32 = "0.13.4"
+# kaspa-consensus-core = "0.13.4"
+# kaspa-notify = "0.13.4"
+# kaspa-rpc-core = "0.13.4"
+# kaspa-utils = "0.13.4"
+# kaspa-wallet-core = "0.13.4"
+# kaspa-wrpc-client = "0.13.4"
+# kaspa-wasm = "0.13.4"
+# kaspa-hashes = "0.13.4"
+
+kaspa-addresses = { path = "../rusty-kaspa/crypto/addresses" }
+kaspa-bip32 = { path = "../rusty-kaspa/wallet/bip32" }
+kaspa-consensus-core = { path = "../rusty-kaspa/consensus/core" }
+kaspa-notify = { path = "../rusty-kaspa/notify" }
+kaspa-rpc-core = { path = "../rusty-kaspa/rpc/core" }
+kaspa-utils = { path = "../rusty-kaspa/utils" }
+kaspa-wallet-core = { path = "../rusty-kaspa/wallet/core" }
+kaspa-wallet-keys = { path = "../rusty-kaspa/wallet/keys" }
+kaspa-wrpc-client = { path = "../rusty-kaspa/rpc/wrpc/client" }
+kaspa-hashes = { path = "../rusty-kaspa/crypto/hashes" }
+
+# kaspa-addresses = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-bip32 = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-consensus-core = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-notify = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-rpc-core = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-utils = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-wallet-core = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-wallet-keys = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-wrpc-client = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-wasm = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+# kaspa-hashes = { git = "https://github.com/kaspanet/rusty-kaspa.git", branch = "master" }
+
+
+# _________________________________________________________
+#  _ _ _ ____ ____ _  _ ____ _    ____ _ _ _    ____ ____ 
+#  | | | |  | |__/ |_/  |___ |    |  | | | | __ |__/ [__  
+#  |_|_| |__| |  \ | \_ |    |___ |__| |_|_|    |  \ ___] 
+# _________________________________________________________
+
+
+workflow-core = "0.12.0"
+workflow-http = "0.12.0"
+workflow-log = "0.12.0"
+workflow-wasm = "0.12.0"
+
+# workflow-core = { path = "../workflow-rs/core" }
+# workflow-http = { path = "../workflow-rs/http" }
+# workflow-log = { path = "../workflow-rs/log" }
+# workflow-wasm = { path = "../workflow-rs/wasm" }
+
+# workflow-core = {  git = "https://github.com/workflow-rs/workflow-rs.git", branch = "master", features = ["no-unsafe-eval"] }
+# workflow-http = { git = "https://github.com/workflow-rs/workflow-rs.git", branch = "master" }
+# workflow-log = { git = "https://github.com/workflow-rs/workflow-rs.git", branch = "master" }
+# workflow-wasm = { git = "https://github.com/workflow-rs/workflow-rs.git", branch = "master" }
+
+# ----------------------------------------
+# ----------------------------------------
+# ----------------------------------------
+
+cfg-if = "1.0.0"
+futures = { version = "0.3.29" }
+futures-util = { version = "0.3.29", default-features = false, features = ["alloc"] }
+js-sys = "0.3.64"
+qrcode = "0.14.0"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1.0.108"
+serde-wasm-bindgen = "0.6.5"
+serde_with = "3.8.1"
+thiserror = "1.0.50"
+wasm-bindgen = "0.2.92"
+wasm-bindgen-futures = "0.4"
+web-sys = { version = "0.3.64", features = ['Window'] }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+kaspa-wasm = { path = "../rusty-kaspa/wasm" }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { version = "1", features = ["sync", "rt-multi-thread", "process"] }
+
+
+
+[profile.release]
+opt-level = 2
+# opt-level = 3
+# lto = true
+
+[profile.native-release]
+inherits = "release"
+opt-level = 3
+lto = true
+# strip = true
